@@ -1,0 +1,78 @@
+*{
+    box-sizing: border-box;
+}
+header{
+    background-color: #424141;
+    margin-bottom: 40px;
+}
+header h1{
+    text-align: center;
+    font-size: 300%;
+    line-height: 80px;
+    color: white;
+    font-weight: 600;
+}
+#leftImage , #rightImage , #middleImage{
+    width: 300px;
+    height: 300px;
+}
+#imageDiv{
+    text-align: center;
+}
+main div:first-child{
+text-align: center;
+width: 50%;
+margin-left: auto;
+margin-right: auto;
+margin-bottom: 40px;
+}
+#Form{
+    display: inline-block;
+    text-align: left;
+}
+#imageDiv{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+#imageDiv img{
+margin-left: 6%;
+margin-right: 6%;
+}
+#btnDiv{
+    text-align: right;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+#resultbtn{
+    background-color: #424141;
+    border: none;
+    line-height: 30px;
+    width: 10%;
+    color: white;
+
+}
+#listDiv{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+#resultList{
+ margin-bottom: 40px;
+ width: 40%;
+ margin-left: auto;
+ margin-right: auto;
+ padding-top: 30px;
+ padding-bottom: 30px;
+ background-color: whitesmoke;
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#resultList li{
+margin-top: 10px;
+margin-bottom: 10px;
+font-size: 130%;
+}
