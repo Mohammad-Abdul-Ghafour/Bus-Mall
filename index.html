@@ -14,7 +14,7 @@
     <header>
         <h1>Bus Mall</h1>
     </header>
-    <main>
+    <main id="main">
         <div>
             <form id="Form">
                 <fieldset>
@@ -26,9 +26,7 @@
             </form>
         </div>
         <div id="imageDiv">
-            <img id="leftImage" src=""
-            ><img id="middleImage" src=""
-            ><img id="rightImage" src="">
+            <img id="leftImage" src=""><img id="middleImage" src=""><img id="rightImage" src="">
         </div>
         <div id="btnDiv">
             <button id="resultbtn">View Results</button>
@@ -37,9 +35,25 @@
             <ul id="resultList">
 
             </ul>
+        </div>  
+        <!-- <div id="chartContainar"> -->
+            <canvas id="myChart"></canvas>
+        <!-- </div> -->
+        <div id="chartName">
+            <p>VIEWS</p>
+            <p>VOTES</p>
         </div>
+        <div id="pieChart">
+        <div id="chartdiv"></div>
+        <div id="chartdiv2"></div>
+    </div>
     </main>
     <footer></footer>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="JS/app.js"></script>
 </body>
 

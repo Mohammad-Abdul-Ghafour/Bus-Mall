@@ -20,6 +20,9 @@ let imageNameArr = ['banana.jpg',
     'wine-glass.jpg'];
 let seenImage = []
 let lastImages = []
+let arrayOfNames = []
+let imageVotes = []
+let imageViews = []
 let maxRounds = 25
 let startingRound = 1
 
@@ -31,12 +34,23 @@ let resultbtn = document.getElementById("resultbtn")
 let Form = document.getElementById('Form')
 resultList.style.display = "none"
 
+let displayChartName = document.getElementById('chartName')
+displayChartName.style.display = "none"
+
+let displayPieChart = document.getElementById('pieChart')
+displayPieChart.style.display = "none"
+
+let displayColumnChart = document.getElementById('myChart')
+displayColumnChart.style.display = "none"
+
 function Imagespropreties(imageName) {
     this.imageName = imageName.split('.')[0]
     this.imagePath = `Images/${imageName}`
     this.votes = 0
     this.views = 0
     seenImage.push(this)
+    arrayOfNames.push(this.imageName)
+
 }
 
 for (let i = 0; i < imageNameArr.length; i++) {
@@ -98,27 +112,50 @@ function clickHandler(event) {
     }
 }
 resultbtn.addEventListener('click', resultHandler)
+
+
 function resultHandler() {
-    
+
+
+
+
     // resultList.style.display = "none"
     // console.log('condition', startingRound === maxRounds + 1)
     // console.log(startingRound , maxRounds + 1)
     if (startingRound === maxRounds + 1) {
-    while (resultList.firstChild) {
-        // console.log('inside while')
-        resultList.removeChild(resultList.firstChild)
-    }
+        while (resultList.firstChild) {
+            // console.log('inside while')
+            resultList.removeChild(resultList.firstChild)
+        }
         for (let i = 0; i < seenImage.length; i++) {
             // console.log('inside for')
             let liEl = document.createElement('li');
             resultList.appendChild(liEl);
             liEl.textContent = `${seenImage[i].imageName} had ${seenImage[i].votes} votes and was seen ${seenImage[i].views} times.`;
+            imageVotes[i] = seenImage[i].votes
+            imageViews[i] = seenImage[i].views
         }
+        if (myChart) {
+
+            myChart.update();
+        } else {
+
+            chartRender();
+        }
+
+        pie()
         resultList.style.display = "block"
+        displayPieChart.style.display = "flex"
+        displayColumnChart.style.display = "block"
+        displayChartName.style.display = "flex"
+
+
+        console.log(imageVotes)
+        resultbtn.removeEventListener('click', resultHandler);
     }
-// console.log(startingRound)
-// console.log(typeof maxRounds)
-// console.log(seenImage   )
+    // console.log(startingRound)
+    // console.log(typeof maxRounds)
+    // console.log(seenImage   )
 }
 
 
@@ -137,5 +174,140 @@ function assignRoundNumber(event) {
     leftImage.addEventListener('click', clickHandler)
     middleImage.addEventListener('click', clickHandler)
     rightImage.addEventListener('click', clickHandler)
+
+    // myChart.splice(myChart[0])
+    // if(myChart){
+    //     myChart.destroy();
+    // }
+    resultbtn.addEventListener('click', resultHandler)
+
     renderImage();
 }
+
+let myChart;
+
+function chartRender() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: arrayOfNames,
+            datasets: [{
+                label: '# of Votes',
+                data: imageVotes,
+                backgroundColor: [
+                    'rgba(153, 102, 255, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: '# of Views',
+                data: imageViews,
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    console.log(myChart)
+
+
+}
+
+let chart2
+let chart
+function pie() {
+    am4core.ready(function () {
+        if(chart){
+
+            chart.dispose();
+        }
+        // Themes begin
+        am4core.useTheme(am4themes_dataviz);
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+         chart = am4core.create("chartdiv", am4charts.PieChart);
+
+        // Add data
+        let chartArr = []
+        for (let i = 0; i < seenImage.length; i++) {
+            if (seenImage[i].views != 0) {
+                chartArr.push(seenImage[i])
+            }
+        }
+        chart.data = chartArr;
+
+        let pieSeries = chart.series.push(new am4charts.PieSeries());
+
+        pieSeries.dataFields.value = "views";
+        pieSeries.dataFields.category = "imageName";
+        pieSeries.slices.template.stroke = am4core.color("#fff");
+        pieSeries.slices.template.strokeWidth = 2;
+        pieSeries.slices.template.strokeOpacity = 1;
+        // pieSeries.alignLabels = false
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+        // Add and configure Series
+
+
+
+
+    });
+    am4core.ready(function () {
+        if(chart2){
+
+            chart2.dispose();
+        }
+        // Themes begin
+        am4core.useTheme(am4themes_dataviz);
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart2 instance
+        chart2 = am4core.create("chartdiv2", am4charts.PieChart);
+
+        // Add data
+        let chartArr = []
+        for (let i = 0; i < seenImage.length; i++) {
+            if (seenImage[i].votes != 0) {
+                chartArr.push(seenImage[i])
+            }
+        }
+        chart2.data = chartArr;
+
+        // Add and configure Series
+        let pieSeries2 = chart2.series.push(new am4charts.PieSeries());
+        pieSeries2.dataFields.value = "votes";
+        pieSeries2.dataFields.category = "imageName";
+        pieSeries2.slices.template.stroke = am4core.color("#fff");
+        pieSeries2.slices.template.strokeWidth = 2;
+        pieSeries2.slices.template.strokeOpacity = 1;
+        // pieSeries2.alignLabels = false
+        // This creates initial animation
+        pieSeries2.hiddenState.properties.opacity = 1;
+        pieSeries2.hiddenState.properties.endAngle = -90;
+        pieSeries2.hiddenState.properties.startAngle = -90;
+
+    });
+}
+
+
+
