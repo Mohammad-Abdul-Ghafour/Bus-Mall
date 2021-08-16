@@ -76,3 +76,38 @@ margin-top: 10px;
 margin-bottom: 10px;
 font-size: 130%;
 }
+canvas{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    width: 80%!important ;
+    height: auto!important    ;
+}
+#chartdiv{
+    width: 50%;
+    height: 500px;
+    display: inline-block;
+}
+#chartdiv2{
+    width: 50%;
+    height: 500px;
+    display: inline-block;
+
+}
+#pieChart{
+    display: flex;
+}
+#chartName{
+    display: flex;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 180%;
+}
+#chartName p:first-child{
+    width: 50%;
+    
+}
+#chartName p:last-child{
+    width: 50%;
+}
