@@ -53,7 +53,10 @@ margin-right: 6%;
     line-height: 30px;
     width: 10%;
     color: white;
-
+}
+#resultbtn:hover{
+    background-color: #979393;
+    cursor: pointer;
 }
 #listDiv{
     width: 80%;
@@ -110,4 +113,15 @@ canvas{
 }
 #chartName p:last-child{
     width: 50%;
+}
+#loadResults{
+    background-color: #424141;
+    border: none;
+    line-height: 30px;
+    width: 10%;
+    color: white;
+}
+#loadResults:hover{
+    background-color: #979393;
+    cursor: pointer;
 }

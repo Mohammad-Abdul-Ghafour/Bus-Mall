@@ -25,12 +25,17 @@ let imageVotes = []
 let imageViews = []
 let maxRounds = 25
 let startingRound = 1
+let leftIndex
+let rightIndex
+let middleIndex
 
 let leftImage = document.getElementById("leftImage")
 let middleImage = document.getElementById("middleImage")
 let rightImage = document.getElementById("rightImage")
 let resultList = document.getElementById("resultList")
 let resultbtn = document.getElementById("resultbtn")
+let loadResults = document.getElementById("loadResults")
+
 let Form = document.getElementById('Form')
 resultList.style.display = "none"
 
@@ -50,20 +55,18 @@ function Imagespropreties(imageName) {
     this.views = 0
     seenImage.push(this)
     arrayOfNames.push(this.imageName)
-
 }
 
 for (let i = 0; i < imageNameArr.length; i++) {
     new Imagespropreties(imageNameArr[i])
 }
-let leftIndex
-let rightIndex
-let middleIndex
+
+loadData();
 
 function randomNumber() {
     return Math.floor(Math.random() * seenImage.length);
 }
-// console.log(leftIndex)
+
 function renderImage() {
     leftIndex = randomNumber()
     middleIndex = randomNumber()
@@ -82,10 +85,9 @@ function renderImage() {
     lastImages[0] = leftIndex
     lastImages[1] = middleIndex
     lastImages[2] = rightIndex
-    // console.log(lastImages)
-
 }
 renderImage()
+
 leftImage.addEventListener('click', clickHandler)
 middleImage.addEventListener('click', clickHandler)
 rightImage.addEventListener('click', clickHandler)
@@ -106,35 +108,24 @@ function clickHandler(event) {
         leftImage.removeEventListener('click', clickHandler);
         middleImage.removeEventListener('click', clickHandler);
         rightImage.removeEventListener('click', clickHandler);
-
-
-
     }
 }
+
 resultbtn.addEventListener('click', resultHandler)
-
-
 function resultHandler() {
 
-
-
-
-    // resultList.style.display = "none"
-    // console.log('condition', startingRound === maxRounds + 1)
-    // console.log(startingRound , maxRounds + 1)
-    if (startingRound === maxRounds + 1) {
+    if (startingRound === maxRounds + 1 ) {
         while (resultList.firstChild) {
-            // console.log('inside while')
             resultList.removeChild(resultList.firstChild)
         }
         for (let i = 0; i < seenImage.length; i++) {
-            // console.log('inside for')
             let liEl = document.createElement('li');
             resultList.appendChild(liEl);
             liEl.textContent = `${seenImage[i].imageName} had ${seenImage[i].votes} votes and was seen ${seenImage[i].views} times.`;
             imageVotes[i] = seenImage[i].votes
             imageViews[i] = seenImage[i].views
         }
+        saveData();
         if (myChart) {
 
             myChart.update();
@@ -149,23 +140,14 @@ function resultHandler() {
         displayColumnChart.style.display = "block"
         displayChartName.style.display = "flex"
 
-
-        console.log(imageVotes)
         resultbtn.removeEventListener('click', resultHandler);
     }
-    // console.log(startingRound)
-    // console.log(typeof maxRounds)
-    // console.log(seenImage   )
 }
 
-
-
-// console.log(resultList.childElementCount)
 Form.addEventListener('submit', assignRoundNumber)
 function assignRoundNumber(event) {
     event.preventDefault()
     maxRounds = Number(event.target.roundNumber.value)
-    // console.log(maxRounds)
     for (let i = 0; i < seenImage.length; i++) {
         seenImage[i].votes = 0
         seenImage[i].views = 0
@@ -174,18 +156,12 @@ function assignRoundNumber(event) {
     leftImage.addEventListener('click', clickHandler)
     middleImage.addEventListener('click', clickHandler)
     rightImage.addEventListener('click', clickHandler)
-
-    // myChart.splice(myChart[0])
-    // if(myChart){
-    //     myChart.destroy();
-    // }
     resultbtn.addEventListener('click', resultHandler)
 
     renderImage();
 }
 
 let myChart;
-
 function chartRender() {
     let ctx = document.getElementById('myChart').getContext('2d');
     myChart = new Chart(ctx, {
@@ -223,8 +199,6 @@ function chartRender() {
             }
         }
     });
-    console.log(myChart)
-
 
 }
 
@@ -232,7 +206,7 @@ let chart2
 let chart
 function pie() {
     am4core.ready(function () {
-        if(chart){
+        if (chart) {
 
             chart.dispose();
         }
@@ -242,7 +216,7 @@ function pie() {
         // Themes end
 
         // Create chart instance
-         chart = am4core.create("chartdiv", am4charts.PieChart);
+        chart = am4core.create("chartdiv", am4charts.PieChart);
 
         // Add data
         let chartArr = []
@@ -267,12 +241,9 @@ function pie() {
         pieSeries.hiddenState.properties.startAngle = -90;
         // Add and configure Series
 
-
-
-
     });
     am4core.ready(function () {
-        if(chart2){
+        if (chart2) {
 
             chart2.dispose();
         }
@@ -309,5 +280,41 @@ function pie() {
     });
 }
 
+function saveData() {
+    let data = JSON.stringify(seenImage)
+    localStorage.setItem('data',data)
+}
 
+function loadData() {
+let dataLoad = localStorage.getItem('data')
+if(dataLoad){
+    seenImage = JSON.parse(dataLoad)
+}
+}
 
+loadResults.addEventListener('click',renderLoadResults)
+function renderLoadResults(){
+        if (localStorage.getItem('data')) {
+        while (resultList.firstChild) {
+            resultList.removeChild(resultList.firstChild)
+        }
+        for (let i = 0; i < seenImage.length; i++) {
+
+            let liEl = document.createElement('li');
+            resultList.appendChild(liEl);
+            liEl.textContent = `${seenImage[i].imageName} had ${seenImage[i].votes} votes and was seen ${seenImage[i].views} times.`;
+            imageVotes[i] = seenImage[i].votes
+            imageViews[i] = seenImage[i].views
+        }
+        if (myChart) {
+            myChart.update();
+        } else {
+            chartRender();
+        }
+        pie()
+        resultList.style.display = "block"
+        displayPieChart.style.display = "flex"
+        displayColumnChart.style.display = "block"
+        displayChartName.style.display = "flex"
+    }
+}
