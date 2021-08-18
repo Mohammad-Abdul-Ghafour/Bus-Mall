@@ -114,7 +114,7 @@ function clickHandler(event) {
 resultbtn.addEventListener('click', resultHandler)
 function resultHandler() {
 
-    if (startingRound === maxRounds + 1 ) {
+    if (startingRound === maxRounds + 1) {
         while (resultList.firstChild) {
             resultList.removeChild(resultList.firstChild)
         }
@@ -281,20 +281,29 @@ function pie() {
 }
 
 function saveData() {
+    let getData = localStorage.getItem('data')
+    let normalData =  JSON.parse(getData)
+    if (normalData) {
+        for (let i = 0; i < seenImage.length; i++) {
+            seenImage[i].views += normalData[i].views
+            seenImage[i].votes += normalData[i].votes
+        }
+        
+    }
     let data = JSON.stringify(seenImage)
-    localStorage.setItem('data',data)
+    localStorage.setItem('data', data)
 }
 
 function loadData() {
-let dataLoad = localStorage.getItem('data')
-if(dataLoad){
-    seenImage = JSON.parse(dataLoad)
-}
+    let dataLoad = localStorage.getItem('data')
+    if (dataLoad) {
+        seenImage = JSON.parse(dataLoad)
+    }
 }
 
-loadResults.addEventListener('click',renderLoadResults)
-function renderLoadResults(){
-        if (localStorage.getItem('data')) {
+loadResults.addEventListener('click', renderLoadResults)
+function renderLoadResults() {
+    if (localStorage.getItem('data')) {
         while (resultList.firstChild) {
             resultList.removeChild(resultList.firstChild)
         }
